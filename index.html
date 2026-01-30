@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MineCreator | AI Plugin Builder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e88e5;
+            --primary-dark: #1565c0;
+            --primary-light: #64b5f6;
+            --secondary: #0288d1;
+            --dark: #0a1929;
+            --darker: #07121b;
+            --light: #e3f2fd;
+            --success: #00c853;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --gray: #2d3748;
+            --border: rgba(255,255,255,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            background: linear-gradient(to right, var(--primary-light), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            color: var(--primary-light);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-links i {
+            margin-right: 5px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #b0bec5;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-light);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #90a4ae;
+        }
+
+        /* Generator Section */
+        .generator-container {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-light);
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .config-group {
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .config-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--primary-light);
+            font-weight: 500;
+        }
+
+        .styled-select, .styled-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .styled-select:focus, .styled-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
+        }
+
+        .styled-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-family: 'Consolas', monospace;
+            resize: vertical;
+            transition: all 0.3s;
+            line-height: 1.5;
+        }
+
+        .styled-textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .feature-checkbox:hover {
+            background: rgba(30, 136, 229, 0.1);
+        }
+
+        .feature-checkbox input {
+            accent-color: var(--primary);
+        }
+
+        /* Buttons */
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 136, 229, 0.3);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-animation {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .cube {
+            width: 33%;
+            height: 33%;
+            background: var(--primary-light);
+            float: left;
+            animation: cubeGridScaleDelay 1.3s infinite ease-in-out;
+        }
+
+        .cube1 { animation-delay: 0.2s; }
+        .cube2 { animation-delay: 0.3s; }
+        .cube3 { animation-delay: 0.4s; }
+        .cube4 { animation-delay: 0.1s; }
+        .cube5 { animation-delay: 0.2s; }
+        .cube6 { animation-delay: 0.3s; }
+        .cube7 { animation-delay: 0.0s; }
+        .cube8 { animation-delay: 0.1s; }
+        .cube9 { animation-delay: 0.2s; }
+
+        .loading-text {
+            font-size: 18px;
+            color: var(--primary-light);
+            margin-bottom: 10px;
+        }
+
+        .loading-subtext {
+            color: #90a4ae;
+            font-size: 14px;
+        }
+
+        /* Results */
+        .results-container {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+        }
+
+        .results-content {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .file-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .file-tab {
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .file-tab.active {
+            background: var(--primary);
+        }
+
+        .file-content {
+            display: none;
+        }
+
+        .file-content.active {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 50px;
+            color: #90a4ae;
+            font-size: 14px;
+        }
+
+        .made-by {
+            color: var(--primary-light);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes cubeGridScaleDelay {
+            0%, 70%, 100% { transform: scale3D(1, 1, 1); }
+            35% { transform: scale3D(0, 0, 1); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav-links {
+                display: flex;
+                gap: 20px;
+            }
+            
+            .nav-links a {
+                margin: 0;
+            }
+            
+            .hero h2 {
+                font-size: 28px;
+            }
+            
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>MineCreator</h1>
+                    <p>AI-Powered Minecraft Plugin Builder</p>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="#"><i class="fas fa-home"></i> Home</a>
+                <a href="admin.html" target="_blank"><i class="fas fa-cog"></i> Admin</a>
+                <a href="#"><i class="fas fa-question-circle"></i> Docs</a>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>Create Professional Minecraft Plugins with AI</h2>
+            <p>Describe your plugin idea, and our AI will generate complete, production-ready code for any Minecraft version and platform. No coding experience required!</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="pluginsCount">1,247</span>
+                    <span class="stat-label">Plugins Generated</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="usersCount">892</span>
+                    <span class="stat-label">Active Developers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="versionsCount">14</span>
+                    <span class="stat-label">MC Versions</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Plugin Generator -->
+        <section class="generator-container">
+            <h2 class="section-title"><i class="fas fa-magic"></i> Plugin Generator</h2>
+            
+            <div class="config-grid">
+                <div class="config-group">
+                    <label><i class="fas fa-server"></i> Server Platform</label>
+                    <select id="platform" class="styled-select">
+                        <option value="spigot">Spigot</option>
+                        <option value="paper" selected>Paper</option>
+                        <option value="purpur">Purpur</option>
+                        <option value="velocity">Velocity</option>
+                        <option value="bungeecord">BungeeCord</option>
+                        <option value="fabric">Fabric</option>
+                        <option value="forge">Forge</option>
+                    </select>
+                </div>
+                
+                <div class="config-group">
+                    <label><i class="fas fa-code-branch"></i> Minecraft Version</label>
+                    <select id="version" class="styled-select">
+                        <option value="1.21.1" selected>1.21.1 (Latest)</option>
+                        <option value="1.20.6">1.20.6</option>
+                        <option value="1.20.4">1.20.4</option>
+                        <option value="1.20.1">1.20.1</option>
+                        <option value="1.19.4">1.19.4</option>
+                        <option value="1.18.2">1.18.2</option>
+                        <option value="1.17.1">1.17.1</option>
+                        <option value="1.16.5">1.16.5</option>
+                        <option value="1.15.2">1.15.2</option>
+                        <option value="1.14.4">1.14.4</option>
+                        <option value="1.13.2">1.13.2</option>
+                        <option value="1.12.2">1.12.2</option>
+                        <option value="1.11.2">1.11.2</option>
+                        <option value="1.10.2">1.10.2</option>
+                        <option value="1.9.4">1.9.4</option>
+                        <option value="1.8.9">1.8.9</option>
+                    </select>
+                </div>
+                
+                <div class="config-group">
+                    <label><i class="fas fa-cube"></i> Plugin Name</label>
+                    <input type="text" id="pluginName" class="styled-input" placeholder="MyAwesomePlugin" value="MyPlugin">
+                </div>
+                
+                <div class="config-group">
+                    <label><i class="fas fa-file-code"></i> Main Class</label>
+                    <input type="text" id="mainClass" class="styled-input" placeholder="Main" value="Main">
+                </div>
+            </div>
+
+            <div class="config-group">
+                <label><i class="fas fa-edit"></i> Describe Your Plugin Idea</label>
+                <textarea id="pluginDescription" class="styled-textarea" placeholder="Describe exactly what you want your plugin to do. Be as detailed as possible!
+
+Example: Create a plugin that gives players a custom welcome message when they join, includes a /warp command with GUI menu, has configurable rewards system, and stores player data in a config file.">Create a plugin that gives players a custom welcome message when they join and adds a /hello command that sends a greeting message back.</textarea>
+            </div>
+
+            <div class="config-group">
+                <label><i class="fas fa-star"></i> Advanced Features (Optional)</label>
+                <textarea id="advancedFeatures" class="styled-textarea" placeholder="Add any specific features or requirements:
+
+- Use PlaceholderAPI for variables
+- Add MySQL database support
+- Include permission nodes
+- Add configuration file
+- Create GUI menus
+- Add metrics/analytics
+- Support multiple languages"></textarea>
+            </div>
+
+            <div class="config-group">
+                <label><i class="fas fa-check-circle"></i> Additional Options</label>
+                <div class="features-grid">
+                    <label class="feature-checkbox">
+                        <input type="checkbox" id="optConfig" checked>
+                        <span>Configuration File</span>
+                    </label>
+                    <label class="feature-checkbox">
+                        <input type="checkbox" id="optPermissions" checked>
+                        <span>Permission Nodes</span>
+                    </label>
+                    <label class="feature-checkbox">
+                        <input type="checkbox" id="optMessages">
+                        <span>Custom Messages</span>
+                    </label>
+                    <label class="feature-checkbox">
+                        <input type="checkbox" id="optMetrics">
+                        <span>bStats Metrics</span>
+                    </label>
+                    <label class="feature-checkbox">
+                        <input type="checkbox" id="optUpdate">
+                        <span>Update Checker</span>
+                    </label>
+                    <label class="feature-checkbox">
+                        <input type="checkbox" id="optLogging">
+                        <span>Advanced Logging</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="generate-btn" onclick="generatePlugin()">
+                <i class="fas fa-bolt"></i> Generate Plugin Now
+            </button>
+        </section>
+
+        <!-- Loading Animation -->
+        <div class="loading-container" id="loadingContainer">
+            <div class="loading-animation">
+                <div class="cube cube1"></div>
+                <div class="cube cube2"></div>
+                <div class="cube cube3"></div>
+                <div class="cube cube4"></div>
+                <div class="cube cube5"></div>
+                <div class="cube cube6"></div>
+                <div class="cube cube7"></div>
+                <div class="cube cube8"></div>
+                <div class="cube cube9"></div>
+            </div>
+            <div class="loading-text">Creating your professional plugin...</div>
+            <div class="loading-subtext">This may take 30-45 seconds. Please don't close this window.</div>
+            <div class="loading-subtext" id="stepText">Initializing AI reasoning...</div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-container" id="resultsContainer">
+            <div class="results-header">
+                <h2 class="section-title"><i class="fas fa-check-circle"></i> Plugin Generated Successfully!</h2>
+                <div class="results-actions">
+                    <button class="action-btn" onclick="downloadPlugin()">
+                        <i class="fas fa-download"></i> Download ZIP
+                    </button>
+                    <button class="action-btn" onclick="copyAllCode()">
+                        <i class="fas fa-copy"></i> Copy Code
+                    </button>
+                    <button class="action-btn" onclick="resetGenerator()">
+                        <i class="fas fa-redo"></i> New Plugin
+                    </button>
+                </div>
+            </div>
+            
+            <div class="results-content">
+                <div class="file-tabs" id="fileTabs"></div>
+                <div id="fileContents"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="made-by">Made by HeaVy</div>
+            <p>MineCreator AI Plugin Builder © 2024 | All generated code is free to use for any purpose</p>
+            <p style="margin-top: 10px; font-size: 12px;">Server Status: <span id="statusText" style="color: var(--success);">● Online</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Configuration
+        const API_KEY = "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";
+        let generatedPluginData = {};
+        let currentFile = '';
+
+        // Simulate live stats
+        setInterval(() => {
+            const pluginsCount = document.getElementById('pluginsCount');
+            const usersCount = document.getElementById('usersCount');
+            pluginsCount.textContent = (parseInt(pluginsCount.textContent) + Math.floor(Math.random() * 5)).toLocaleString();
+            usersCount.textContent = (parseInt(usersCount.textContent) + Math.floor(Math.random() * 3)).toLocaleString();
+        }, 10000);
+
+        // Main generation function
+        async function generatePlugin() {
+            // Show loading
+            document.getElementById('loadingContainer').style.display = 'block';
+            document.getElementById('resultsContainer').style.display = 'none';
+            
+            // Get input values
+            const platform = document.getElementById('platform').value;
+            const version = document.getElementById('version').value;
+            const pluginName = document.getElementById('pluginName').value || 'MyPlugin';
+            const mainClass = document.getElementById('mainClass').value || 'Main';
+            const description = document.getElementById('pluginDescription').value;
+            const advanced = document.getElementById('advancedFeatures').value;
+            
+            // Get options
+            const options = {
+                config: document.getElementById('optConfig').checked,
+                permissions: document.getElementById('optPermissions').checked,
+                messages: document.getElementById('optMessages').checked,
+                metrics: document.getElementById('optMetrics').checked,
+                update: document.getElementById('optUpdate').checked,
+                logging: document.getElementById('optLogging').checked
+            };
+
+            // Step-by-step generation
+            try {
+                // Step 1: Reasoning phase
+                updateStepText("Step 1/3: Analyzing requirements with deep reasoning...");
+                
+                const reasoningResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "model": "deepseek/deepseek-v3.2",
+                        "messages": [{
+                            "role": "user",
+                            "content": `Create a professional Minecraft plugin with these specifications:
+
+PLATFORM: ${platform.toUpperCase()}
+MINECRAFT VERSION: ${version}
+PLUGIN NAME: ${pluginName}
+MAIN CLASS: ${mainClass}
+
+PLUGIN DESCRIPTION: ${description}
+${advanced ? "ADVANCED FEATURES: " + advanced : ""}
+
+OPTIONS ENABLED:
+${options.config ? "- Configuration file support" : ""}
+${options.permissions ? "- Permission nodes" : ""}
+${options.messages ? "- Customizable messages" : ""}
+${options.metrics ? "- bStats metrics" : ""}
+${options.update ? "- Update checker" : ""}
+${options.logging ? "- Advanced logging" : ""}
+
+Think through the architecture, required dependencies, API compatibility, and best practices for ${version}.`
+                        }],
+                        "reasoning": {"enabled": true},
+                        "max_tokens": 1000
+                    })
+                });
+
+                const reasoningResult = await reasoningResponse.json();
+                const reasoningData = reasoningResult.choices[0].message;
+
+                // Step 2: Code generation phase
+                updateStepText("Step 2/3: Generating optimized code structure...");
+                
+                const messages = [
+                    {
+                        role: 'user',
+                        content: `Create a professional Minecraft plugin with these specifications:
+
+PLATFORM: ${platform.toUpperCase()}
+MINECRAFT VERSION: ${version}
+PLUGIN NAME: ${pluginName}
+MAIN CLASS: ${mainClass}
+
+PLUGIN DESCRIPTION: ${description}
+${advanced ? "ADVANCED FEATURES: " + advanced : ""}
+
+OPTIONS ENABLED:
+${options.config ? "- Configuration file support" : ""}
+${options.permissions ? "- Permission nodes" : ""}
+${options.messages ? "- Customizable messages" : ""}
+${options.metrics ? "- bStats metrics" : ""}
+${options.update ? "- Update checker" : ""}
+${options.logging ? "- Advanced logging" : ""}`,
+                    },
+                    {
+                        role: 'assistant',
+                        content: reasoningData.content,
+                        reasoning_details: reasoningData.reasoning_details,
+                    },
+                    {
+                        role: 'user',
+                        content: `Now generate the COMPLETE plugin code. Provide ALL files needed.
+
+FORMAT REQUIREMENTS:
+1. Start with "## PLUGIN FILES ##"
+2. For each file: "### FILENAME: filename.ext"
+3. Then the complete code for that file
+4. Use proper Java conventions
+5. Include all imports
+6. Add comprehensive comments
+7. Follow ${platform} API best practices for ${version}
+8. Include error handling
+9. Add installation instructions at the end
+
+IMPORTANT: Generate plugin.yml/sponge.json/velocity.toml as appropriate for ${platform}.
+Make sure the code is production-ready and optimized.`,
+                    },
+                ];
+
+                // Step 3: Final code generation
+                updateStepText("Step 3/3: Creating final production code...");
+                
+                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${API_KEY}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        "model": "deepseek/deepseek-v3.2",
+                        "messages": messages,
+                        "max_tokens": 4000,
+                        "temperature": 0.7
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.choices && data.choices[0]) {
+                    const pluginCode = data.choices[0].message.content;
+                    processGeneratedCode(pluginCode);
+                    
+                    // Hide loading, show results
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    document.getElementById('resultsContainer').style.display = 'block';
+                    
+                    // Update stats
+                    document.getElementById('pluginsCount').textContent = 
+                        (parseInt(document.getElementById('pluginsCount').textContent.replace(/,/g, '')) + 1).toLocaleString();
+                    
+                } else {
+                    throw new Error("No response from AI");
+                }
+                
+            } catch (error) {
+                console.error("Generation error:", error);
+                document.getElementById('loadingContainer').style.display = 'none';
+                alert("Error generating plugin: " + error.message);
+            }
+        }
+
+        function updateStepText(text) {
+            document.getElementById('stepText').textContent = text;
+        }
+
+        function processGeneratedCode(fullCode) {
+            generatedPluginData = {};
+            const lines = fullCode.split('\n');
+            let currentFile = '';
+            let currentContent = [];
+            let inCodeBlock = false;
+
+            for (let line of lines) {
+                // Look for file headers
+                if (line.includes('FILENAME:') || line.includes('File:') || line.match(/^###\s+\w+\.\w+/)) {
+                    if (currentFile) {
+                        generatedPluginData[currentFile] = currentContent.join('\n');
+                    }
+                    
+                    // Extract filename
+                    const match = line.match(/FILENAME:\s*(\S+)|File:\s*(\S+)|\s*(\w+\.\w+)/);
+                    if (match) {
+                        currentFile = match[1] || match[2] || match[3];
+                    } else {
+                        currentFile = 'plugin.yml'; // Default
+                    }
+                    
+                    currentContent = [];
+                    inCodeBlock = true;
+                } else if (line.includes('## PLUGIN FILES ##') || line.includes('## INSTALLATION')) {
+                    // Skip headers
+                    continue;
+                } else if (inCodeBlock) {
+                    currentContent.push(line);
+                }
+            }
+
+            // Add last file
+            if (currentFile && currentContent.length > 0) {
+                generatedPluginData[currentFile] = currentContent.join('\n');
+            }
+
+            // If parsing failed, use full code as plugin.yml
+            if (Object.keys(generatedPluginData).length === 0) {
+                generatedPluginData = {
+                    'plugin.yml': fullCode,
+                    'Main.java': '// Code parsing error - see plugin.yml for full code'
+                };
+            }
+
+            // Display files
+            displayFiles();
+        }
+
+        function displayFiles() {
+            const fileTabs = document.getElementById('fileTabs');
+            const fileContents = document.getElementById('fileContents');
+            
+            fileTabs.innerHTML = '';
+            fileContents.innerHTML = '';
+            
+            let firstFile = true;
+            
+            for (const [filename, content] of Object.entries(generatedPluginData)) {
+                // Create tab
+                const tab = document.createElement('div');
+                tab.className = `file-tab ${firstFile ? 'active' : ''}`;
+                tab.textContent = filename;
+                tab.onclick = () => switchFile(filename);
+                fileTabs.appendChild(tab);
+                
+                // Create content
+                const contentDiv = document.createElement('div');
+                contentDiv.className = `code-block file-content ${firstFile ? 'active' : ''}`;
+                contentDiv.id = `file-${filename}`;
+                contentDiv.innerHTML = `<pre>${escapeHtml(content)}</pre>`;
+                fileContents.appendChild(contentDiv);
+                
+                if (firstFile) {
+                    currentFile = filename;
+                    firstFile = false;
+                }
+            }
+        }
+
+        function switchFile(filename) {
+            // Update tabs
+            document.querySelectorAll('.file-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.file-tab:contains('${filename}')`).classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.file-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`file-${filename}`).classList.add('active');
+            
+            currentFile = filename;
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function downloadPlugin() {
+            if (Object.keys(generatedPluginData).length === 0) {
+                alert("Generate a plugin first!");
+                return;
+            }
+
+            const pluginName = document.getElementById('pluginName').value || 'plugin';
+            let zipContent = `=== ${pluginName.toUpperCase()} PLUGIN ===\n`;
+            zipContent += `Generated by MineCreator AI\n`;
+            zipContent += `Platform: ${document.getElementById('platform').value}\n`;
+            zipContent += `Version: ${document.getElementById('version').value}\n`;
+            zipContent += `Date: ${new Date().toLocaleDateString()}\n`;
+            zipContent += `================================\n\n`;
+
+            for (const [filename, content] of Object.entries(generatedPluginData)) {
+                zipContent += `\n=== FILE: ${filename} ===\n${content}\n`;
+            }
+
+            zipContent += `\n=== INSTALLATION ===\n`;
+            zipContent += `1. Compile the Java files with Maven/Gradle\n`;
+            zipContent += `2. Place the generated .jar file in your server's plugins folder\n`;
+            zipContent += `3. Restart your server\n`;
+            zipContent += `4. Configure the plugin in the generated config.yml\n`;
+
+            const blob = new Blob([zipContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${pluginName.replace(/\s+/g, '_')}_plugin.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert(`Plugin downloaded as ${pluginName}_plugin.txt!\nRename to .java/.yml files as needed.`);
+        }
+
+        function copyAllCode() {
+            let allCode = '';
+            for (const [filename, content] of Object.entries(generatedPluginData)) {
+                allCode += `// ${filename}\n${content}\n\n`;
+            }
+            
+            navigator.clipboard.writeText(allCode)
+                .then(() => alert("All plugin code copied to clipboard!"))
+                .catch(err => alert("Failed to copy: " + err));
+        }
+
+        function resetGenerator() {
+            document.getElementById('resultsContainer').style.display = 'none';
+            document.getElementById('pluginDescription').value = '';
+            document.getElementById('advancedFeatures').value = '';
+            document.getElementById('pluginName').value = 'MyPlugin';
+            document.getElementById('mainClass').value = 'Main';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("MineCreator AI Plugin Builder initialized");
+        });
+    </script>
+</body>
+</html>
