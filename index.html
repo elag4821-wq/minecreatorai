@@ -600,11 +600,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .header {
@@ -867,18 +862,17 @@ Examples:
     </footer>
 
     <script>
-        // Configuration
-        const API_KEY = "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";
+        // Configuration - USING WORKING DEEPSEEK API KEY
+        const API_KEY = "sk-7c59d2f0a8a64c018f3741c8d5c4d697";
         let generatedPlugin = null;
         let currentFiles = {};
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             console.log("MineCreator AI initialized");
-            updateStats();
         });
 
-        // Main generation function - FIXED AND WORKING
+        // Main generation function - FIXED
         async function generatePlugin() {
             // Show loading
             showLoading(true);
@@ -900,7 +894,7 @@ Examples:
                 updateStep(2, "Creating plugin structure and dependencies...");
                 await sleep(1000);
 
-                // Step 3: Generate code using AI (with error handling)
+                // Step 3: Generate code
                 updateStep(3, "Generating professional Java code...");
                 
                 let aiGeneratedCode = "";
@@ -953,7 +947,7 @@ Examples:
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer sk-7c59d2f0a8a64c018f3741c8d5c4d697" // Working key
+                        "Authorization": "Bearer " + API_KEY
                     },
                     body: JSON.stringify({
                         model: "deepseek-chat",
@@ -1187,7 +1181,7 @@ debug-mode: false
             for (let line of lines) {
                 if (line.startsWith('===') && line.endsWith('===')) {
                     if (currentFile) {
-                        files[currentFile] = currentContent.join('\n');
+                        files[currentFile] = currentContent.join('\n').trim();
                     }
                     
                     // Extract filename
@@ -1196,13 +1190,21 @@ debug-mode: false
                     currentContent = [];
                     inFile = true;
                 } else if (inFile) {
+                    if (line.trim() === '===' || line.includes('===')) {
+                        continue;
+                    }
                     currentContent.push(line);
                 }
             }
 
             // Add last file
             if (currentFile && currentContent.length > 0) {
-                files[currentFile] = currentContent.join('\n');
+                files[currentFile] = currentContent.join('\n').trim();
+            }
+
+            // If no files detected, show everything
+            if (Object.keys(files).length === 0) {
+                files['Generated_Plugin'] = code;
             }
 
             return files;
@@ -1516,6 +1518,7 @@ Free to use and modify.`;
             tabsContainer.innerHTML = '';
             
             let firstFile = null;
+            let fileIndex = 0;
             
             // Create tabs for each file
             Object.keys(currentFiles).forEach((fileName, index) => {
@@ -1528,6 +1531,7 @@ Free to use and modify.`;
                 if (index === 0) {
                     firstFile = fileName;
                 }
+                fileIndex++;
             });
             
             // Show first file content
@@ -1550,28 +1554,56 @@ Free to use and modify.`;
             contentElement.textContent = currentFiles[fileName] || 'File not found';
         }
 
-        // Download as .JAR (simulated - creates proper structure)
+        // Download as .JAR
         function downloadPluginJar() {
             if (!generatedPlugin || !currentFiles) {
                 alert("Please generate a plugin first!");
                 return;
             }
 
-            // Create a zip file structure
-            const zipContent = createZipStructure();
+            // Create a complete plugin package as text
+            let jarContent = `=== ${generatedPlugin.name}.jar Structure ===
+This file contains all plugin files ready for compilation.
+
+INSTRUCTIONS TO CREATE .JAR:
+1. Save each file below with its correct name
+2. Install Maven (maven.apache.org)
+3. Open terminal in the plugin folder
+4. Run: mvn clean package
+5. Find ${generatedPlugin.name}.jar in 'target' folder
+6. Place in your server's plugins folder
+
+=== FILES INCLUDED ===\n\n`;
             
-            // Create download
-            const blob = new Blob([zipContent], { type: 'application/zip' });
+            // Add each file
+            Object.entries(currentFiles).forEach(([fileName, content]) => {
+                jarContent += `=== FILE: ${fileName} ===\n${content}\n\n`;
+            });
+            
+            jarContent += `=== BUILD COMMANDS ===
+# Windows:
+mvn.cmd clean package
+
+# Linux/Mac:
+mvn clean package
+
+=== SERVER SETUP ===
+1. Place ${generatedPlugin.name}.jar in plugins/ folder
+2. Restart your Minecraft server
+3. Plugin will auto-generate config files
+4. Edit config.yml to customize`;
+
+            const blob = new Blob([jarContent], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${generatedPlugin.name}.jar`;
+            a.download = `${generatedPlugin.name}_plugin_package.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            alert(`${generatedPlugin.name}.jar downloaded successfully!`);
+            alert(`${generatedPlugin.name} plugin package downloaded!\n\nFollow the instructions in the file to create the .jar.`);
         }
 
         // Download source code as .ZIP
@@ -1614,29 +1646,6 @@ Date: ${new Date().toLocaleString()}
             URL.revokeObjectURL(url);
             
             alert(`Source code for ${generatedPlugin.name} downloaded!`);
-        }
-
-        // Create zip structure (simplified - in real app use JSZip)
-        function createZipStructure() {
-            let structure = `=== JAR STRUCTURE FOR ${generatedPlugin.name} ===
-This is a simulated .jar structure. In production, this would be a real .jar file.
-
-To create a real .jar:
-1. Download the source code
-2. Install Maven
-3. Run: mvn clean package
-4. Find ${generatedPlugin.name}.jar in target folder
-
-JAR CONTENTS:
-`;
-            
-            Object.keys(currentFiles).forEach(fileName => {
-                structure += `- ${fileName}\n`;
-            });
-            
-            structure += `\nPlugin ready for Minecraft ${generatedPlugin.platform}!`;
-            
-            return structure;
         }
 
         // Copy all code
@@ -1686,15 +1695,6 @@ JAR CONTENTS:
                     s.classList.remove('active');
                 }
             });
-        }
-
-        function updateStats() {
-            // Update displayed stats (simulated)
-            const stats = {
-                plugins: "1,247",
-                success: "98.5%",
-                users: "892"
-            };
         }
 
         function sleep(ms) {
