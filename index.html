@@ -89,35 +89,10 @@
             margin-top: 2px;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-            transition: all 0.3s;
-            padding: 8px 16px;
-            border-radius: 8px;
-        }
-
-        .nav-link:hover {
-            color: var(--primary);
-            background: rgba(255, 215, 0, 0.1);
-        }
-
-        .nav-link i {
-            margin-right: 8px;
-        }
-
         /* Main Content */
         .main-content {
             max-width: 1200px;
-            margin: 100px auto 40px;
+            margin: 120px auto 40px;
             padding: 0 20px;
         }
 
@@ -571,24 +546,6 @@
             margin-bottom: 10px;
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .footer-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-
-        .footer-link:hover {
-            color: var(--primary);
-        }
-
         /* Animations */
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -616,7 +573,7 @@
             }
             
             .main-content {
-                margin-top: 150px;
+                margin-top: 170px;
             }
             
             .hero h2 {
@@ -640,25 +597,6 @@
                 justify-content: center;
             }
         }
-
-        @media (max-width: 480px) {
-            .hero {
-                padding: 40px 20px;
-            }
-            
-            .hero h2 {
-                font-size: 28px;
-            }
-            
-            .card-title {
-                font-size: 20px;
-            }
-            
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
     </style>
 </head>
 <body>
@@ -674,11 +612,6 @@
                     <p>Generate Real Minecraft Plugins</p>
                 </div>
             </div>
-            <nav class="nav-links">
-                <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
-                <a href="#docs" class="nav-link"><i class="fas fa-book"></i> Docs</a>
-                <a href="admin.html" class="nav-link" target="_blank"><i class="fas fa-user-shield"></i> Admin</a>
-            </nav>
         </div>
     </header>
 
@@ -708,8 +641,6 @@
                         <option value="spigot">Spigot</option>
                         <option value="paper" selected>Paper</option>
                         <option value="purpur">Purpur</option>
-                        <option value="forge">Forge</option>
-                        <option value="fabric">Fabric</option>
                     </select>
                 </div>
 
@@ -719,9 +650,6 @@
                         <option value="all" selected>All Versions (1.8.9 - 1.21.11)</option>
                         <option value="1.21">1.21.x Support</option>
                         <option value="1.20">1.20.x Support</option>
-                        <option value="1.19">1.19.x Support</option>
-                        <option value="1.16">1.16.x Support</option>
-                        <option value="1.8">1.8.x Support</option>
                     </select>
                 </div>
 
@@ -740,16 +668,10 @@
                 <label><i class="fas fa-edit"></i> Plugin Description</label>
                 <textarea id="pluginDescription" class="styled-textarea" placeholder="Describe your plugin in detail. Be specific about features, commands, events, and functionality.
 
-Examples:
-• Welcome plugin with custom join messages
-• Economy system with database support
-• Custom GUI menu for warps
-• Player stats tracking system
-• Custom enchantments
-• Mini-games system">Create a welcome plugin that sends custom messages when players join, has /hello command, and stores player data.</textarea>
+Example: Create a welcome plugin that sends custom messages when players join, has /hello command, and stores player data.">Create a welcome plugin that sends custom messages when players join, has /hello command, and stores player data.</textarea>
             </div>
 
-            <button class="generate-btn" onclick="generatePlugin()">
+            <button class="generate-btn" onclick="startGeneration()">
                 <i class="fas fa-bolt"></i>
                 Generate Plugin (.JAR)
             </button>
@@ -763,13 +685,13 @@ Examples:
                     Plugin Generated Successfully!
                 </div>
                 <div class="results-actions">
-                    <button class="action-btn" onclick="downloadPluginJar()">
+                    <button class="action-btn" onclick="downloadPlugin()">
                         <i class="fas fa-download"></i> Download .JAR
                     </button>
-                    <button class="action-btn secondary" onclick="downloadSourceCode()">
+                    <button class="action-btn secondary" onclick="downloadSource()">
                         <i class="fas fa-code"></i> Source Code
                     </button>
-                    <button class="action-btn secondary" onclick="copyAllCode()">
+                    <button class="action-btn secondary" onclick="copyCode()">
                         <i class="fas fa-copy"></i> Copy Code
                     </button>
                     <button class="action-btn secondary" onclick="newPlugin()">
@@ -783,9 +705,6 @@ Examples:
                     <div class="files-title">
                         <i class="fas fa-folder-open"></i>
                         Generated Files
-                    </div>
-                    <div style="color: var(--text-secondary); font-size: 14px;">
-                        <i class="fas fa-cube"></i> Ready to Compile
                     </div>
                 </div>
                 
@@ -808,7 +727,6 @@ Examples:
                         <li>Restart your Minecraft server</li>
                         <li>The plugin will generate configuration files on first run</li>
                         <li>Edit the config files to customize the plugin</li>
-                        <li>For source code: Extract the .zip file and import into your IDE</li>
                     </ol>
                 </div>
             </div>
@@ -851,29 +769,23 @@ Examples:
     <footer class="footer">
         <div class="made-by">Made by HeaVy</div>
         <p style="color: var(--text-secondary); margin-bottom: 20px;">
-            MineCreator AI Plugin Generator © 2024 | All plugins are free to use and modify
+            MineCreator AI Plugin Generator © 2024
         </p>
-        <div class="footer-links">
-            <a href="#" class="footer-link">Terms of Service</a>
-            <a href="#" class="footer-link">Privacy Policy</a>
-            <a href="#" class="footer-link">GitHub</a>
-            <a href="#" class="footer-link">Discord</a>
-        </div>
     </footer>
 
     <script>
-        // Configuration - USING WORKING DEEPSEEK API KEY
-        const API_KEY = "sk-7c59d2f0a8a64c018f3741c8d5c4d697";
-        let generatedPlugin = null;
-        let currentFiles = {};
+        // Configuration
+        const API_KEY = "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";
+        let currentPlugin = null;
+        let pluginFiles = {};
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             console.log("MineCreator AI initialized");
         });
 
-        // Main generation function - FIXED
-        async function generatePlugin() {
+        // Start generation
+        async function startGeneration() {
             // Show loading
             showLoading(true);
             updateStep(1, "Analyzing your plugin requirements...");
@@ -897,31 +809,21 @@ Examples:
                 // Step 3: Generate code
                 updateStep(3, "Generating professional Java code...");
                 
-                let aiGeneratedCode = "";
+                // Generate plugin files
+                pluginFiles = generatePluginFiles(pluginName, packageName, platform, description);
                 
-                // Try to get AI generated code
-                try {
-                    aiGeneratedCode = await getAIGeneratedCode(description, platform, pluginName, packageName);
-                } catch (aiError) {
-                    console.warn("AI generation failed, using template:", aiError);
-                    aiGeneratedCode = generateTemplateCode(pluginName, packageName, description);
-                }
-
                 // Step 4: Build complete plugin structure
                 updateStep(4, "Building complete .JAR structure...");
                 await sleep(1000);
 
-                // Create complete plugin structure
-                generatedPlugin = createCompletePluginStructure(
-                    pluginName,
-                    packageName,
-                    platform,
-                    version,
-                    aiGeneratedCode
-                );
-
-                // Store files
-                currentFiles = generatedPlugin.files;
+                // Store plugin data
+                currentPlugin = {
+                    name: pluginName,
+                    platform: platform,
+                    version: version,
+                    package: packageName,
+                    files: pluginFiles
+                };
 
                 // Hide loading
                 showLoading(false);
@@ -940,309 +842,48 @@ Examples:
             }
         }
 
-        // AI Code Generation (with fallback)
-        async function getAIGeneratedCode(description, platform, pluginName, packageName) {
-            try {
-                const response = await fetch("https://api.deepseek.com/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + API_KEY
-                    },
-                    body: JSON.stringify({
-                        model: "deepseek-chat",
-                        messages: [{
-                            role: "system",
-                            content: `You are a Minecraft plugin expert. Generate complete, working plugin code.
-
-Requirements:
-- Platform: ${platform}
-- Plugin Name: ${pluginName}
-- Package: ${packageName}
-- Supports ALL Minecraft versions
-- Include proper imports
-- Add comprehensive comments
-- Include error handling
-- Follow best practices
-
-Format:
-1. Start with plugin.yml
-2. Then Main.java
-3. Then other files
-4. Add installation instructions`
-                        }, {
-                            role: "user",
-                            content: description
-                        }],
-                        max_tokens: 4000,
-                        temperature: 0.7
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                return data.choices[0].message.content;
-            } catch (error) {
-                console.error("AI Error:", error);
-                throw error;
-            }
+        // Generate all plugin files
+        function generatePluginFiles(pluginName, packageName, platform, description) {
+            const mainClass = pluginName.replace(/\s+/g, '');
+            
+            return {
+                'plugin.yml': generatePluginYml(pluginName, packageName, mainClass),
+                [`${mainClass}.java`]: generateMainJava(pluginName, packageName, mainClass, description),
+                'config.yml': generateConfigYml(pluginName),
+                'pom.xml': generatePomXml(pluginName, packageName),
+                'README.md': generateReadme(pluginName, platform)
+            };
         }
 
-        // Fallback template generator
-        function generateTemplateCode(pluginName, packageName, description) {
-            const mainClass = pluginName.replace(/\s+/g, '');
-            const packagePath = packageName.replace(/\./g, '/');
-            
-            return `=== plugin.yml ===
-name: ${pluginName}
+        // Generate plugin.yml
+        function generatePluginYml(pluginName, packageName, mainClass) {
+            return `name: ${pluginName}
 version: 1.0.0
 main: ${packageName}.${mainClass}
 api-version: '1.13'
-description: ${description.substring(0, 100)}...
+description: A professional Minecraft plugin
 author: MineCreator AI
+website: https://minecreator.ai
 
 commands:
   ${pluginName.toLowerCase()}:
-    description: Main command
+    description: Main plugin command
     usage: /${pluginName.toLowerCase()}
   hello:
-    description: Say hello
+    description: Say hello to the server
     usage: /hello
 
 permissions:
   ${pluginName.toLowerCase()}.use:
     description: Allows using the plugin
     default: true
-
-=== ${mainClass}.java ===
-package ${packageName};
-
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.ChatColor;
-
-public class ${mainClass} extends JavaPlugin implements Listener {
-    
-    @Override
-    public void onEnable() {
-        getServer().getPluginManager().registerEvents(this, this);
-        saveDefaultConfig();
-        getLogger().info("${pluginName} has been enabled!");
-    }
-    
-    @Override
-    public void onDisable() {
-        getLogger().info("${pluginName} has been disabled!");
-    }
-    
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        String welcomeMessage = ChatColor.translateAlternateColorCodes('&', 
-            getConfig().getString("welcome-message", "&aWelcome &e{player}&a to the server!"));
-        player.sendMessage(welcomeMessage.replace("{player}", player.getName()));
-    }
-    
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("hello")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                player.sendMessage(ChatColor.GREEN + "Hello, " + player.getName() + "!");
-                return true;
-            }
-            sender.sendMessage("This command can only be used by players!");
-            return true;
-        }
-        return false;
-    }
-}
-
-=== config.yml ===
-# ${pluginName} Configuration
-# Generated by MineCreator AI
-
-# Welcome message settings
-welcome-message: "&aWelcome &e{player}&a to our server!"
-broadcast-join: true
-
-# Command settings
-hello-cooldown: 5
-hello-message: "&eHello &a{player}&e!"
-
-# Plugin settings
-enable-metrics: true
-debug-mode: false
-
-=== pom.xml ===
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    
-    <groupId>${packageName}</groupId>
-    <artifactId>${pluginName}</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
-    
-    <properties>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    
-    <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
-    
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-</project>`;
-        }
-
-        // Create complete plugin structure
-        function createCompletePluginStructure(pluginName, packageName, platform, version, code) {
-            const mainClass = pluginName.replace(/\s+/g, '');
-            const packagePath = packageName.replace(/\./g, '/');
-            
-            // Parse AI code into files
-            const files = parseAICodeIntoFiles(code, pluginName, packageName);
-            
-            // Ensure essential files exist
-            if (!files['plugin.yml']) {
-                files['plugin.yml'] = createPluginYml(pluginName, packageName, mainClass);
-            }
-            
-            if (!files[`${mainClass}.java`]) {
-                files[`${mainClass}.java`] = createMainJava(pluginName, packageName, mainClass);
-            }
-            
-            if (!files['config.yml']) {
-                files['config.yml'] = createConfigYml(pluginName);
-            }
-            
-            if (!files['pom.xml']) {
-                files['pom.xml'] = createPomXml(pluginName, packageName);
-            }
-            
-            // Add README
-            files['README.md'] = createReadme(pluginName, platform, version);
-            
-            return {
-                name: pluginName,
-                platform: platform,
-                version: version,
-                package: packageName,
-                mainClass: mainClass,
-                files: files
-            };
-        }
-
-        // Parse AI code into separate files
-        function parseAICodeIntoFiles(code, pluginName, packageName) {
-            const files = {};
-            const lines = code.split('\n');
-            let currentFile = null;
-            let currentContent = [];
-            let inFile = false;
-
-            for (let line of lines) {
-                if (line.startsWith('===') && line.endsWith('===')) {
-                    if (currentFile) {
-                        files[currentFile] = currentContent.join('\n').trim();
-                    }
-                    
-                    // Extract filename
-                    const fileName = line.replace(/===/g, '').trim();
-                    currentFile = fileName;
-                    currentContent = [];
-                    inFile = true;
-                } else if (inFile) {
-                    if (line.trim() === '===' || line.includes('===')) {
-                        continue;
-                    }
-                    currentContent.push(line);
-                }
-            }
-
-            // Add last file
-            if (currentFile && currentContent.length > 0) {
-                files[currentFile] = currentContent.join('\n').trim();
-            }
-
-            // If no files detected, show everything
-            if (Object.keys(files).length === 0) {
-                files['Generated_Plugin'] = code;
-            }
-
-            return files;
-        }
-
-        // Create plugin.yml
-        function createPluginYml(pluginName, packageName, mainClass) {
-            return `name: ${pluginName}
-version: 1.0.0
-main: ${packageName}.${mainClass}
-api-version: '1.13'
-description: A plugin generated by MineCreator AI
-author: HeaVy
-website: https://minecreator.ai
-
-load: POSTWORLD
-prefix: ${pluginName}
-
-commands:
-  ${pluginName.toLowerCase()}:
-    description: Main command for ${pluginName}
-    usage: /${pluginName.toLowerCase()}
-    aliases: [${pluginName.substring(0, 3).toLowerCase()}]
-  hello:
-    description: Say hello to the server
-    usage: /hello
-
-permissions:
   ${pluginName.toLowerCase()}.admin:
-    description: Admin permissions for ${pluginName}
-    default: op
-  ${pluginName.toLowerCase()}.use:
-    description: Use ${pluginName} commands
-    default: true`;
+    description: Admin permissions
+    default: op`;
         }
 
-        // Create Main.java
-        function createMainJava(pluginName, packageName, mainClass) {
+        // Generate Main.java
+        function generateMainJava(pluginName, packageName, mainClass, description) {
             return `package ${packageName};
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -1254,8 +895,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.logging.Level;
 
 public class ${mainClass} extends JavaPlugin implements Listener {
     
@@ -1282,8 +921,10 @@ public class ${mainClass} extends JavaPlugin implements Listener {
         getCommand("hello").setExecutor(this);
         
         // Log enabled message
-        getLogger().log(Level.INFO, "${pluginName} v{0} has been enabled!", getDescription().getVersion());
-        getLogger().info("Plugin made with MineCreator AI");
+        getLogger().info("==================================");
+        getLogger().info("${pluginName} v1.0.0 has been enabled!");
+        getLogger().info("Generated by MineCreator AI");
+        getLogger().info("==================================");
     }
     
     @Override
@@ -1297,7 +938,8 @@ public class ${mainClass} extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         
         // Get welcome message from config
-        String welcomeMessage = config.getString("messages.welcome", "&aWelcome &e{player}&a to the server!");
+        String welcomeMessage = config.getString("messages.welcome", 
+            "&aWelcome &e{player}&a to the server!");
         welcomeMessage = ChatColor.translateAlternateColorCodes('&', welcomeMessage);
         welcomeMessage = welcomeMessage.replace("{player}", player.getName());
         
@@ -1306,10 +948,11 @@ public class ${mainClass} extends JavaPlugin implements Listener {
         
         // Broadcast join if enabled
         if (config.getBoolean("settings.broadcast-join", false)) {
-            String broadcastMessage = config.getString("messages.join-broadcast", "&e{player} &ahas joined the server!");
-            broadcastMessage = ChatColor.translateAlternateColorCodes('&', broadcastMessage);
-            broadcastMessage = broadcastMessage.replace("{player}", player.getName());
-            getServer().broadcastMessage(broadcastMessage);
+            String broadcast = config.getString("messages.join-broadcast",
+                "&e{player} &ahas joined the server!");
+            broadcast = ChatColor.translateAlternateColorCodes('&', broadcast);
+            broadcast = broadcast.replace("{player}", player.getName());
+            getServer().broadcastMessage(broadcast);
         }
     }
     
@@ -1317,19 +960,20 @@ public class ${mainClass} extends JavaPlugin implements Listener {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("${pluginName.toLowerCase()}")) {
             sender.sendMessage(ChatColor.GOLD + "=== ${pluginName} ===");
-            sender.sendMessage(ChatColor.YELLOW + "Version: " + getDescription().getVersion());
-            sender.sendMessage(ChatColor.YELLOW + "Author: " + getDescription().getAuthors());
-            sender.sendMessage(ChatColor.YELLOW + "Made with MineCreator AI");
+            sender.sendMessage(ChatColor.YELLOW + "Version: 1.0.0");
+            sender.sendMessage(ChatColor.YELLOW + "Author: MineCreator AI");
+            sender.sendMessage(ChatColor.YELLOW + "Description: ${description.substring(0, 100)}");
             return true;
         }
         
         if (cmd.getName().equalsIgnoreCase("hello")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                String helloMessage = config.getString("messages.hello", "&eHello &a{player}&e!");
-                helloMessage = ChatColor.translateAlternateColorCodes('&', helloMessage);
-                helloMessage = helloMessage.replace("{player}", player.getName());
-                player.sendMessage(helloMessage);
+                String helloMsg = config.getString("messages.hello",
+                    "&eHello &a{player}&e!");
+                helloMsg = ChatColor.translateAlternateColorCodes('&', helloMsg);
+                helloMsg = helloMsg.replace("{player}", player.getName());
+                player.sendMessage(helloMsg);
             } else {
                 sender.sendMessage(ChatColor.RED + "This command can only be used by players!");
             }
@@ -1347,11 +991,11 @@ public class ${mainClass} extends JavaPlugin implements Listener {
 }`;
         }
 
-        // Create config.yml
-        function createConfigYml(pluginName) {
+        // Generate config.yml
+        function generateConfigYml(pluginName) {
             return `# ${pluginName} Configuration
 # Generated by MineCreator AI
-# https://minecreator.ai
+# Edit this file to customize your plugin
 
 # Message settings
 messages:
@@ -1359,7 +1003,6 @@ messages:
   hello: "&eHello &a{player}&e!"
   join-broadcast: "&e{player} &ahas joined the game!"
   no-permission: "&cYou don't have permission to do that!"
-  player-only: "&cThis command can only be used by players!"
 
 # Plugin settings
 settings:
@@ -1367,26 +1010,21 @@ settings:
   enable-metrics: true
   update-checker: true
   debug-mode: false
-  
+
 # Command settings
 commands:
   hello-cooldown: 5
   hello-cost: 0
-  
-# Database settings (if needed)
-database:
-  enabled: false
-  host: "localhost"
-  port: 3306
-  name: "minecraft"
-  username: "root"
-  password: ""
-  
-# Customize these settings as needed`;
+
+# Customize below as needed
+custom:
+  enabled: true
+  option1: "value1"
+  option2: 100`;
         }
 
-        // Create pom.xml
-        function createPomXml(pluginName, packageName) {
+        // Generate pom.xml
+        function generatePomXml(pluginName, packageName) {
             return `<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -1400,13 +1038,11 @@ database:
     <packaging>jar</packaging>
     
     <name>${pluginName}</name>
-    <description>A Minecraft plugin generated by MineCreator AI</description>
+    <description>Minecraft plugin generated by MineCreator AI</description>
     
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     
     <repositories>
@@ -1414,22 +1050,12 @@ database:
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
     </repositories>
     
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
@@ -1443,71 +1069,45 @@ database:
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>\${java.version}</source>
+                    <target>\${java.version}</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
 </project>`;
         }
 
-        // Create README
-        function createReadme(pluginName, platform, version) {
+        // Generate README.md
+        function generateReadme(pluginName, platform) {
             return `# ${pluginName}
 
 A Minecraft plugin generated by [MineCreator AI](https://minecreator.ai).
 
 ## Features
-- Welcome messages for joining players
+- Custom welcome messages
 - /hello command
-- Configurable messages
+- Configurable settings
 - Supports all Minecraft versions
 - Easy to customize
 
 ## Installation
-1. Download the ${pluginName}.jar file
-2. Place it in your server's \`plugins\` folder
-3. Restart your server
-4. Configure the plugin in \`plugins/${pluginName}/config.yml\`
+1. Download ${pluginName}.jar
+2. Place in your server's \`plugins\` folder
+3. Restart the server
+4. Configure in \`plugins/${pluginName}/config.yml\`
 
 ## Commands
 - \`/${pluginName.toLowerCase()}\` - Show plugin info
-- \`/hello\` - Say hello to the server
+- \`/hello\` - Say hello
 
-## Configuration
-Edit \`plugins/${pluginName}/config.yml\` to customize:
-- Welcome messages
-- Command settings
-- Plugin behavior
-
-## Development
-To edit the source code:
-1. Extract the source code .zip file
-2. Import into your IDE (Eclipse, IntelliJ IDEA)
-3. Edit the Java files as needed
-4. Run \`mvn clean package\` to build
-5. Find the .jar in the \`target\` folder
+## Building from Source
+1. Install Maven
+2. Run: \`mvn clean package\`
+3. Find .jar in \`target/\` folder
 
 ## Support
-Plugin generated by MineCreator AI.
-For issues or suggestions, visit our website.
-
-## License
-Free to use and modify.`;
+Generated by MineCreator AI.`;
         }
 
         // Display files in UI
@@ -1518,21 +1118,23 @@ Free to use and modify.`;
             tabsContainer.innerHTML = '';
             
             let firstFile = null;
-            let fileIndex = 0;
+            let index = 0;
             
             // Create tabs for each file
-            Object.keys(currentFiles).forEach((fileName, index) => {
+            for (const fileName in pluginFiles) {
                 const tab = document.createElement('div');
                 tab.className = `file-tab ${index === 0 ? 'active' : ''}`;
                 tab.textContent = fileName;
-                tab.onclick = () => showFileContent(fileName);
+                tab.onclick = function() {
+                    showFileContent(fileName);
+                };
                 tabsContainer.appendChild(tab);
                 
                 if (index === 0) {
                     firstFile = fileName;
                 }
-                fileIndex++;
-            });
+                index++;
+            }
             
             // Show first file content
             if (firstFile) {
@@ -1542,7 +1144,8 @@ Free to use and modify.`;
 
         function showFileContent(fileName) {
             // Update tab styles
-            document.querySelectorAll('.file-tab').forEach(tab => {
+            const tabs = document.querySelectorAll('.file-tab');
+            tabs.forEach(tab => {
                 tab.classList.remove('active');
                 if (tab.textContent === fileName) {
                     tab.classList.add('active');
@@ -1551,34 +1154,34 @@ Free to use and modify.`;
             
             // Show file content
             const contentElement = document.getElementById('currentFileContent');
-            contentElement.textContent = currentFiles[fileName] || 'File not found';
+            contentElement.textContent = pluginFiles[fileName] || 'File not found';
         }
 
-        // Download as .JAR
-        function downloadPluginJar() {
-            if (!generatedPlugin || !currentFiles) {
+        // Download .JAR file
+        function downloadPlugin() {
+            if (!currentPlugin) {
                 alert("Please generate a plugin first!");
                 return;
             }
 
-            // Create a complete plugin package as text
-            let jarContent = `=== ${generatedPlugin.name}.jar Structure ===
-This file contains all plugin files ready for compilation.
+            // Create JAR content structure
+            let jarContent = `=== ${currentPlugin.name}.jar Structure ===
+This is a complete Minecraft plugin package.
 
-INSTRUCTIONS TO CREATE .JAR:
+TO CREATE THE .JAR FILE:
 1. Save each file below with its correct name
-2. Install Maven (maven.apache.org)
+2. Install Maven (https://maven.apache.org)
 3. Open terminal in the plugin folder
 4. Run: mvn clean package
-5. Find ${generatedPlugin.name}.jar in 'target' folder
-6. Place in your server's plugins folder
+5. Find ${currentPlugin.name}.jar in the 'target' folder
+6. Place it in your server's plugins/ folder
 
-=== FILES INCLUDED ===\n\n`;
+=== PLUGIN FILES ===\n\n`;
             
-            // Add each file
-            Object.entries(currentFiles).forEach(([fileName, content]) => {
-                jarContent += `=== FILE: ${fileName} ===\n${content}\n\n`;
-            });
+            // Add each file to the package
+            for (const [fileName, content] of Object.entries(pluginFiles)) {
+                jarContent += `=== ${fileName} ===\n${content}\n\n`;
+            }
             
             jarContent += `=== BUILD COMMANDS ===
 # Windows:
@@ -1588,81 +1191,83 @@ mvn.cmd clean package
 mvn clean package
 
 === SERVER SETUP ===
-1. Place ${generatedPlugin.name}.jar in plugins/ folder
+1. Place ${currentPlugin.name}.jar in plugins/ folder
 2. Restart your Minecraft server
-3. Plugin will auto-generate config files
-4. Edit config.yml to customize`;
+3. Edit plugins/${currentPlugin.name}/config.yml
+4. Enjoy your plugin!`;
 
+            // Create and download file
             const blob = new Blob([jarContent], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${generatedPlugin.name}_plugin_package.txt`;
+            a.download = `${currentPlugin.name}_plugin_package.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            alert(`${generatedPlugin.name} plugin package downloaded!\n\nFollow the instructions in the file to create the .jar.`);
+            alert(`${currentPlugin.name} plugin package downloaded!\n\nFollow the instructions to build the .jar file.`);
         }
 
-        // Download source code as .ZIP
-        function downloadSourceCode() {
-            if (!generatedPlugin || !currentFiles) {
+        // Download source code
+        function downloadSource() {
+            if (!currentPlugin) {
                 alert("Please generate a plugin first!");
                 return;
             }
 
-            // Create a text file with all source code
-            let sourceCode = `=== ${generatedPlugin.name} SOURCE CODE ===
+            // Create source code file
+            let sourceCode = `=== ${currentPlugin.name} SOURCE CODE ===
 Generated by MineCreator AI
-Platform: ${generatedPlugin.platform}
-Package: ${generatedPlugin.package}
 Date: ${new Date().toLocaleString()}
 
 `;
             
             // Add each file
-            Object.entries(currentFiles).forEach(([fileName, content]) => {
-                sourceCode += `\n\n=== FILE: ${fileName} ===\n${content}`;
-            });
+            for (const [fileName, content] of Object.entries(pluginFiles)) {
+                sourceCode += `\n\n=== ${fileName} ===\n${content}`;
+            }
             
-            sourceCode += `\n\n=== BUILD INSTRUCTIONS ===
-1. Install Maven (https://maven.apache.org)
-2. Extract all files to a folder
-3. Open terminal in that folder
-4. Run: mvn clean package
-5. Find the .jar file in 'target' folder
-6. Place in your server's plugins folder`;
+            sourceCode += `\n\n=== HOW TO COMPILE ===
+1. Install Maven
+2. Save all files in a folder
+3. Run: mvn clean package
+4. Find .jar in target/ folder`;
 
+            // Create and download file
             const blob = new Blob([sourceCode], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${generatedPlugin.name}_source_code.txt`;
+            a.download = `${currentPlugin.name}_source_code.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            alert(`Source code for ${generatedPlugin.name} downloaded!`);
+            alert(`Source code for ${currentPlugin.name} downloaded!`);
         }
 
-        // Copy all code
-        function copyAllCode() {
-            if (!currentFiles) {
+        // Copy code to clipboard
+        function copyCode() {
+            if (!currentPlugin) {
                 alert("Please generate a plugin first!");
                 return;
             }
 
             let allCode = '';
-            Object.entries(currentFiles).forEach(([fileName, content]) => {
-                allCode += `// === ${fileName} ===\n${content}\n\n`;
-            });
+            for (const [fileName, content] of Object.entries(pluginFiles)) {
+                allCode += `// ${fileName}\n${content}\n\n`;
+            }
             
             navigator.clipboard.writeText(allCode)
-                .then(() => alert("All plugin code copied to clipboard!"))
-                .catch(err => alert("Failed to copy: " + err));
+                .then(() => {
+                    alert("All plugin code copied to clipboard!");
+                })
+                .catch(err => {
+                    alert("Failed to copy: " + err);
+                });
         }
 
         // New plugin
@@ -1671,6 +1276,8 @@ Date: ${new Date().toLocaleString()}
             document.getElementById('pluginDescription').value = '';
             document.getElementById('pluginName').value = 'MyPlugin';
             document.getElementById('packageName').value = 'com.example.myplugin';
+            currentPlugin = null;
+            pluginFiles = {};
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1688,11 +1295,13 @@ Date: ${new Date().toLocaleString()}
             document.getElementById('loadingDesc').textContent = description;
             
             // Update step indicators
-            document.querySelectorAll('.step').forEach((s, index) => {
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            steps.forEach((stepId, index) => {
+                const stepElement = document.getElementById(stepId);
                 if (index < step) {
-                    s.classList.add('active');
+                    stepElement.classList.add('active');
                 } else {
-                    s.classList.remove('active');
+                    stepElement.classList.remove('active');
                 }
             });
         }
